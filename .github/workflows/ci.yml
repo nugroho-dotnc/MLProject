@@ -1,0 +1,44 @@
+name: MLflow Retrain CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  train-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Setup Conda environment runner
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          miniconda-version: "latest"
+
+      # 3. Install MLflow on Base to trigger mlflow run
+      - name: Install MLflow
+        run: |
+          pip install mlflow==2.19.0
+
+       # 4. Jalankan MLProject
+      - name: Run MLflow Project
+        run: |
+          cd MLProject      # <-- Sebelumnya cd Workflow-CI/MLProject
+          mlflow run .
+          
+      # 5. Upload hasil model/metrics ke GitHub (Skilled level)
+      - name: Upload MLflow Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlruns-artifacts
+          path: MLProject/mlruns/  # <-- Sebelumnya Workflow-CI/MLProject/mlruns/
+          retention-days: 7
