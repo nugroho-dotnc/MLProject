@@ -31,8 +31,8 @@ jobs:
 
       # 4. Jalankan MLProject
       - name: Run MLflow Project
+        shell: bash -el {0}
         run: |
-          export PATH="/home/runner/miniconda3/bin:$PATH"
           cd MLProject
           mlflow run .
           
