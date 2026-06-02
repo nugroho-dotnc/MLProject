@@ -29,10 +29,11 @@ jobs:
         run: |
           pip install mlflow==2.19.0
 
-       # 4. Jalankan MLProject
+      # 4. Jalankan MLProject
       - name: Run MLflow Project
         run: |
-          cd MLProject      # <-- Sebelumnya cd Workflow-CI/MLProject
+          export PATH="/home/runner/miniconda3/bin:$PATH"
+          cd MLProject
           mlflow run .
           
       # 5. Upload hasil model/metrics ke GitHub (Skilled level)
